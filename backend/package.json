@@ -4,7 +4,9 @@
   "description": "SimpleNote is a RESTful API for a simple note-taking application using Node.js and Express.js, with MongoDB as the database. The API allows users to create, retrieve, update, and delete text notes.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",

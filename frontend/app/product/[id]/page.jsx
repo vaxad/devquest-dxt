@@ -7,7 +7,7 @@ function ProductPage({ params: id }) {
   const [others, setOthers] = useState([]);
   const getData = async (page) => {
     const data = await fetch(
-      `http://172.30.48.233:5000/api/price/fetch/${id.id}`,
+      `https://insightify-9q0p.onrender.com/api/price/fetch/${id.id}`,
       {
         method: "GET",
         headers: {
