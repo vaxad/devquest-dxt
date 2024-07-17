@@ -6,7 +6,9 @@ import store from "@/lib/zustand";
 
 const ProductCard = ({ item }) => {
   const [up, setup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { add } = store();
+
   return (
     <div className="max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
       <div className="bg-[#181818] p-4 rounded-2xl overflow-clip" id="card">
@@ -25,10 +27,14 @@ const ProductCard = ({ item }) => {
             style={{ zIndex: 10 }}>
             {"Pin"}
           </h3>
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+          )}{" "}
           <img
             src={item.images[0]}
             className="w-fit h-full"
-            alt={item.name}></img>
+            alt={item.name}
+            onLoad={() => setIsLoading(false)}></img>
         </div>
         <br />
         <h3 className="text-xl text-white font-bold mb-2">{item.name}</h3>

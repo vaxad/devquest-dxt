@@ -17,7 +17,7 @@ const run = async () => {
     }
   }
   for (const url of urls) {
-    const res = await fetch("http://127.0.0.1:8080/scrape", {
+    const res = await fetch("https://insightify-py.onrender.com/scrape", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

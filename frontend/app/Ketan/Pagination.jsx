@@ -66,8 +66,6 @@ const PaginationComponent = ({ productLinks }) => {
           </PaginationItem>
         );
       }
-
-      // Additional logic for ellipsis and first/last page omitted for brevity
     }
 
     return pagesToRender;
@@ -78,7 +76,7 @@ const PaginationComponent = ({ productLinks }) => {
       <PaginationContent className="text-white flex flex-col px-6 md:px-12 lg:px-24">
         <div
           id="grid"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 rounded mt-4">
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 rounded mt-4">
           {renderProductsForCurrentPage()}
         </div>
         <div className="flex flex-row py-6">

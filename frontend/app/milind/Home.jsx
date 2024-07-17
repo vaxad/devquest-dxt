@@ -8,7 +8,7 @@ export default function Home() {
 
   const handleSearch = async () => {
     const res = await fetch(
-      `http://localhost:5000/api/price/find/${searchTerm}`
+      `https://insightify-9q0p.onrender.com/api/price/find/${searchTerm}`
     );
     const data = await res.json();
     console.log(data);
