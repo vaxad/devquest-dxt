@@ -6,15 +6,12 @@ function ProductPage({ params: id }) {
   const [products, setProducts] = useState([]);
   const [others, setOthers] = useState([]);
   const getData = async (page) => {
-    const data = await fetch(
-      `http://172.30.48.233:5000/api/price/fetch/${id.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-        },
-      }
-    );
+    const data = await fetch(`http://localhost:5000/api/price/fetch/${id.id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
     const products = await data.json();
     console.log(products);
     setProducts(products.product);

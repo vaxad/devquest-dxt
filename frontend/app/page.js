@@ -9,7 +9,7 @@ const App = () => {
       <Home />
       <br />
       <br />
-      <PaginationComponent />
+      {/* <PaginationComponent /> */}
     </div>
   );
 };
