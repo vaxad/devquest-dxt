@@ -9,13 +9,15 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination";
 import ProductCard from "@/app/ketan/ProductCard";
-import Link from "next/link";
+import store from "@/lib/zustand";
+import Loading from "./Loading";
 
 const PaginationComponent = () => {
-  const [products, setProducts] = useState([]);
-
+  const [products, setProducts] = useState(false);
+  const { setArr, arr, loading } = store();
   const getData = async (page) => {
-    const data = await fetch(`http://172.30.48.233:5000/api/price?p=${page}`, {
+    setProducts(false)
+    const data = await fetch(`http://localhost:5000/api/price?p=${page}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -23,11 +25,9 @@ const PaginationComponent = () => {
     });
     const res = await data.json();
     console.log(res);
-    // for(const item in res){
-
-    // }
-    setProducts(res);
-  };
+setArr(res);
+setProducts(true)  
+};
 
   const productsPerPage = 25;
 
@@ -46,6 +46,7 @@ const PaginationComponent = () => {
   useEffect(() => {
     getData(currentPage);
   }, [currentPage]);
+
 
   const renderPaginationLinks = () => {
     const maxPagesToShow = 5; // Adjust this based on your preference
@@ -123,9 +124,9 @@ const PaginationComponent = () => {
     <Pagination>
       <PaginationContent className="text-white flex flex-col px-6 md:px-12 lg:px-24">
         <div id='grid' className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  rounded mt-4">
-          {products.map((product) => (
-            <ProductCard item={product} key={product.name} />
-          ))}
+          {!loading?products?arr.length!==0?arr.map((product) => (
+            <ProductCard item={product} key={product._id} />
+          )):<div className=" col-span-3"><Loading/></div>:<div className=" col-span-3"><Loading></Loading></div>:<div className=" col-span-3"><Loading></Loading></div>}
         </div>
         <div className="flex flex-row py-6 ">
           <PaginationItem>

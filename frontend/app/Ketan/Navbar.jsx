@@ -20,13 +20,13 @@ const Navbar = () => {
                 fill="#DAFE6A"
               />
             </svg>
-            <span className="text-white text-xl font-bold mt-1">Company</span>
+            <span className="text-white text-xl font-bold mt-1">Insightify</span>
           </div>
         </Link>
 
         <div>
           <ul className="hidden md:flex space-x-4 ml-auto text-[#727272]  ">
-            <li className="hover:text-white">
+            {/* <li className="hover:text-white">
               <Link href="/">Home</Link>
             </li>
             <li className="hover:text-white">
@@ -34,10 +34,10 @@ const Navbar = () => {
             </li>
             <li className="hover:text-white">
               <Link href="/prices">Prices</Link>
-            </li>
-            <li className="hover:text-white">
+            </li> */}
+            {/* <li className="hover:text-white">
               <Link href="/api">API</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 

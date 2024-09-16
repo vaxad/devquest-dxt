@@ -1,6 +1,24 @@
-import React from "react";
+"use client"
+
+import store from "@/lib/zustand";
 
 export default function Home() {
+  const {setArr, setLoading} = store()
+  const handleSubmit=async()=>{
+    console.log('clicked');
+    setLoading(true)
+    const text = document.getElementById('search').value;
+    const data = await fetch(`http://localhost:5000/api/price/find/${text}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    const res = await data.json();
+    console.log(res);
+    setArr(res);
+    setLoading(false)
+  }
   return (
     <div className="px-2 [isolation:isolate]">
       <div
@@ -27,6 +45,7 @@ export default function Home() {
               className=" outline-none text-[#F3FF74] rounded-full px-8 py-3 w-96"
             />
             <svg
+            onClick={()=>{handleSubmit()}}
               width="18"
               height="19"
               viewBox="0 0 18 19"

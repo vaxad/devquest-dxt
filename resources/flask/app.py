@@ -5,6 +5,10 @@ import json
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def test():
+    return jsonify({"message": "It works!"})
+
 def create_extractor(url):
     # Create an Extractor by reading from the YAML file
     if("amazon" in url):

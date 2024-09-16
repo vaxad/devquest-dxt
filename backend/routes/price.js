@@ -4,6 +4,8 @@ const fetchuser = require('../middleware/fetchuser');
 const Note = require('../models/Note');
 const { body, validationResult } = require('express-validator');
 const Product = require('../models/ProductCard');
+const User = require('../models/User');
+const UserProduct = require('../models/UserProduct');
 
 const key = "AIzaSyARj3WZVsYwxmVkXhJUwSBkIam-CrcgTL4"
 const cx = "31e5ee6051dd446c5"
@@ -84,6 +86,70 @@ const f2 = async () => {
     }
     console.log("success")
 }
+
+async function sendMail({ email, productName, userName, currentPrice, productLink, reminderPrice }) {
+    const emailUrl = "testvaxad@gmail.com";
+    const  password= 'ibxj pois evfq muzf';
+    console.log(email)
+    // Create a Nodemailer transporter using your email service's credentials
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // e.g., 'gmail', 'yahoo', etc.
+      auth: {
+        user: emailUrl,
+        pass: password,
+      },
+    });
+      // Define the email message
+    const mailOptions = {
+      from: 'testvaxad@gmail.com',
+      to: recipientEmail,
+      subject: `Price Drop Alert for ${productName}`,
+      text: `
+
+      Dear ${userName},
+      
+      We are excited to inform you that the price of the product ${productName} has dropped below your desired threshold.
+      
+      Product Details:
+      - Name: ${productName}
+      - Current Price: ${currentPrice}
+      - Previous Price: ${previousPrice}
+      - Product Link: ${productLink}
+      
+      Hurry up and take advantage of this great deal now!
+      
+      Thank you for using our Price Tracker App.
+      
+      Best Regards,
+      Your Price Tracker Team
+      `
+    };
+  
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
+  }
+const f3 = async(pid) => {
+    try{
+        console.log(pid)
+    const pdt = await Product.findById(pid)
+    const pdts = await Product.find({name:pdt.name}).sort({createdAt:-1})
+    const userpdts = await UserProduct.find({productId:pid})
+    for(const userpdt of userpdts){
+        const user = await User.findOne({email:userpdt.email})
+        if(pdts[0].price<=userpdt.price){
+            sendMail({email:userpdt.email,userName:user.name, productName:pdts[0].name, currentPrice:pdts[0].price, productLink:pdts[0].link, reminderPrice:userpdt.price})
+        }
+    }
+}catch(err){
+
+}
+}
 router.get('/test', async (req, res) => {
     try {
         await f2()
@@ -93,6 +159,7 @@ router.get('/test', async (req, res) => {
         res.status(500).json({ error: "Internal server error" })
     }
 })
+
 //ROUTE 1: fetch all notes using: GET '/api/notes/fetch'
 router.get('/find/:item', async (req, res) => {
     try {
@@ -105,6 +172,7 @@ router.get('/find/:item', async (req, res) => {
         console.log(priceCards.length)
         if(priceCards.length!==0){
         const priceCard = find(req.params.item)
+        f3()
         return res.status(200).json(priceCards);
         }else{
             const priceCard = await find(req.params.item)
@@ -179,24 +247,22 @@ router.delete("/test", async (req, res) => {
 })
 //ROUTE 2: add new note using: POST '/api/notes/'
 router.post('/', fetchuser, [
-    body('title', 'Enter a valid Title').exists(),
-    body('content', 'Enter valid Content').exists()
 ], async (req, res) => {
     try {
+        const { productId, price } = req.body;
+        const user = await User.findById(req.user.id).select("-password");
+        const userpdt = await UserProduct.create({ email: user.email, productId: productId, price: parseFloat(price) })
+        return res.json(userpdt);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+})
 
-        const { title, content } = req.body;
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        const savedNote = await Note.create({
-            title, content,
-            user: req.user.id,
-            createdAt: Date.now(),
-            updatedAt: Date.now()
-        })
-
-        return res.json(savedNote);
+router.post('/mail', [
+], async (req, res) => {
+    try {
+        const resl = await sendMail({email:"prabhuvrd@gmail.com",productName:"iPhone 12",userName:"Varad",currentPrice:"45000",productLink:"https://www.amazon.in/New-Apple-iPhone-12-256GB/dp/B08L5W5Z9Q",reminderPrice:"47000"})
+        return res.json(userpdt);
     } catch (error) {
         return res.status(500).json({ error });
     }
